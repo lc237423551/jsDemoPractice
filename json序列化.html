@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+	var jsonObj = {
+		'title':'hello world',
+		'authors':['lc','wz'],
+		edition:3,
+		year:2017,
+		xx:null,	//null会被Json解析
+		nn:undefined,//undefined会被json直接跳过
+		release: new Date(2011,11,1)
+	}
+	console.log(JSON.parse(JSON.stringify(jsonObj)));
+	console.log(JSON.stringify(jsonObj,null,4));
+	console.log(JSON.stringify(jsonObj,['title','authors'],2));
+	var jsontext = JSON.stringify(jsonObj);
+	// ----------------------------------------------parse
+	console.log(JSON.parse(jsontext,function(k,v){
+		if(k=='release'){
+			return new Date(v);
+		}
+		return v;
+	}));
+
+	var parsobj = JSON.parse('{"p": 5}', function (k, v) {
+	    if(k === '') return v;     // 如果到了最顶层，则直接返回属性值，
+	    return v * 2;              // 否则将属性值变为原来的 2 倍。
+	});                            // { p: 10 }
+	console.log(parsobj)
+	var jsonObj1 = {
+		'title':'hello world',
+		'authors':['lc','wz'],
+		edition:3,
+		year:2017,
+		xx:null,
+		toJSON:function(){
+			return this.title;	//相当于一个过滤器。每次调用stringify如果存在这个函数，只返回这个函数的返回值，如果这个函数没有返回值，
+		},
+		release: new Date(2011,11,1)
+	}
+	console.log(JSON.stringify(jsonObj1))
+	console.log(JSON.stringify(jsonObj1,['year','xx']));//带参数还是会被过滤
+	var jsonText = JSON.stringify(jsonObj,function(key,value){
+		switch(key){
+			case "title":
+				return value.join(',');
+			case "authors":
+				return value.join('+');
+			case "edtion":
+				return undefined;//返回undefined就会删除该属性
+			default:
+				return value;
+		}
+	});
+	console.log(jsonText);
+	</script>
+</body>
+</html>

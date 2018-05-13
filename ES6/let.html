@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+	// -----------------------------暂时性死区
+		var tmp = 123;		
+		if (true) {
+		  //tmp = 'abc'; // ReferenceError
+		  console.log(typeof tmp);
+		  console.log(typeof asdasdas)
+		  let tmp;
+		}
+		// --------------------------------块级作用域场景一。 内层变量覆盖外层变量
+		var tmp = new Date();
+
+		function f() {
+		  console.log(tmp);
+		  if (false) {
+		    var tmp = 'hello world';
+		  }
+		}
+
+		f(); // undefined
+		// ---------场景2 for循环变量泄露为全局变量
+		var s = 'hello';
+
+		for (var i = 0; i < s.length; i++) {
+		  console.log(s[i]);
+		}
+
+		console.log(i); // 5
+	</script>
+</body>
+</html>

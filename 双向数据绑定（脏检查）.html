@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>angularjs双向数据绑定原理</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<input id="input" data-bind="demo">
+	<div id="output" data-bind="demo"></div>
+	<button id="random">随机数</button>
+	<script type="text/javascript">
+		let $i = document.getElementById('input');
+		let $o = document.getElementById('output');
+		let $random = document.getElementById('random');
+
+		class Scope {
+			constructor(){
+				this.nodes=[];
+				this.watchers=[];
+			}
+
+			watch(watchExp,listener = function(){}){
+				// console.log(watchExp)
+				this.watchers.push({	
+					watchExp,
+					listener
+				});
+			}
+
+			digest(){
+				let dirty;
+				let {watchers} = this;
+				do{
+					dirty = false;
+					for(let i = 0,watcher;watcher = watchers[i++];){
+						let newValue = watcher.watchExp();	//必须势函数，动态获取当时的最新值
+						let oldValue = watcher.last;
+						if(newValue !== oldValue){
+							dirty = true;
+							this.update(newValue);
+         					watcher.last = newValue;
+						}
+					}
+				}while(dirty);
+			}
+			update(newValue){	//更新视图中的值
+				const INPUT_NODE = ['INPUT','TEXTAREA'];
+				let {nodes} = this;
+				for(var i = 0,node;node = nodes[i++];){
+					if(INPUT_NODE.includes(node.nodeName)){//如果node的nodename为input或者textarea
+						if(node.value!==newValue){
+							node.value = newValue;	//如果Node的值不等于传入的值那么更新node的值
+						}
+					}else{
+						if(node.textContent!==newValue){
+						node.textContent = newValue;//更新div的值
+						}
+					}
+				}
+			}	
+			bindTo(node){	//绑定节点
+				let {nodes}=this;
+				console.log(this)
+				console.log(nodes)
+				let key = node.getAttribute('data-bind');
+				console.log(key)
+				if(!key){
+					return;
+				}
+				nodes.push(node);
+				this.update(this[key]);
+				console.log(this[key]);
+				this.watch(() => {
+			      return this[key];
+			    }, (newValue) => {
+			      this.update(newValue);
+			    });
+			}
+		}
+		let scope = new Scope();
+		scope.demo = 'default';
+		//数据-->视图
+		scope.bindTo($i);
+		scope.bindTo($o);
+		//视图->数据
+		$i.addEventListener('input', function(){
+		  scope[this.getAttribute('data-bind')] = this.value;
+		  scope.digest();
+		});
+
+		$random.onclick = function(){
+		  scope.demo = Math.floor(Math.random()*10e5);
+		  scope.digest();
+		}
+	</script>
+</body>
+</html>

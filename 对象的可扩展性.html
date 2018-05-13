@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<script type="text/javascript">
+		function a(){
+			this.lc = '刘畅'
+		}
+		var o = {x:1};
+		o.__proto__=a.prototype;
+		a.call(o);
+		console.log(Object.isExtensible(o));//判断对象是否是可扩展的
+		console.log(o.lc)
+		Object.preventExtensions(o);//将对象转为不可扩展的 ，并且这个过程是不可逆的：
+		o.x=1; //严格模式下会报错
+		console.log(Object.isExtensible(o));
+		Object.defineProperty(o,'x',{
+			value:2
+		})
+		console.log(o.x)
+		a.prototype.as = 'sb'
+		console.log(o.lc)
+		console.log(o.as);
+		/*
+		1.Object.preventExtensions可以将对象设置成不可扩展的，即不可添加属性，但是依然可以更改现有属性，并且可以继承原型上的属性。
+		2.Object.seal()可以将对象转换为不可扩展的，并且对象的所有自有属性都不可以配置，也不可以删除，但是写属性依然可以设置
+		3.freeze()更严格的冻结， 在以上的基础上加上了只读特性
+		*/
+
+		var xx = {
+			a:1,
+			b:'sasd'
+		}
+		xx.__proto__.name = 'lc'
+		console.log(xx.name)
+		Object.seal(xx)
+		xx.__proto__.name = 'caonima '
+		console.log(xx.a)
+		console.log(xx.name)
+		Object.defineProperty(xx,a,{
+			value:3
+		})
+		console.log(xx.a)//报错，对象不是可扩展的
+	</script>
+</body>
+</html>

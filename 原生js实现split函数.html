@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		let str = 'i,am,cool,i,love,wz';
+
+		String.prototype.mySplit = function(sqrt){
+			var result = [];
+			var a = 0;
+			var b = 0;
+			for(var i = 0;i<this.length;i++){
+				
+				if(this[i]==sqrt||i==this.length){
+					result[b]='';
+					for(var j = a;j<i;j++){
+						result[b]+=this[j];
+					}
+					b++;
+					a=i+1; 
+				}
+			}
+			return result;
+		}
+		console.log(str.mySplit(','))
+	</script>
+</body>
+</html>

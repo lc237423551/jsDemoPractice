@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+	let [foo=true]=[];
+	console.log(foo);
+	let [x=1]=[undefined];
+	let [y=0]=[null];	//赋值给Null
+	let [z=2] = [6];
+	console.log(x)
+	console.log(y)//null
+	console.log(z)
+	// let { baz } = { lzb: "aaa", bar: "bbb" };
+	// console.log(lzb)
+
+	const node = {
+	  loc: {
+	    start: {
+	      line: 1,
+	      column: 5
+	    }
+	  }
+	};
+
+	let { loc, loc: { start }, loc: { start: { line }} } = node;
+	console.log(line) // 1
+	console.log(loc)  // Object {start: Object}
+	console.log(start) // Object {line: 1, column: 5}
+
+	let obj1 = {};
+	let arr = [];
+	({sb:obj1.prop,bar:arr[0]} = {sb:1,bar:true});
+	console.log(obj1);
+	console.log(arr);
+	</script>
+</body>
+</html>

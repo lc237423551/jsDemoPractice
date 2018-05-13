@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+
+	// -----------------------------------------原型链继承
+	// 缺点1：创建子类型时，不能向超类型中传递参数。
+	// 缺点2： 当原型链中包含引用类型值的原型时,该引用类型值会被所有实例共享;
+		function Dad(name,age){
+			this.name = name;
+			this.age = age;
+			this.counts = [1,2,3,4,5];
+		}
+		Dad.prototype.sayNmae = function() {
+			console.log(this.name)
+		};
+		function Son(name,age){
+			this.name = name;
+			this.age = age;
+		};
+		Son.prototype = new Dad();
+		var son = new Son('刘畅',23);
+		var dad = new Dad('王珍',88);
+		son.sayNmae();
+		son.counts.push(6)	//修改父类counts
+		var son1 = new Son('大哥',11);
+		console.log(son1.counts)//第二个实例对象的counts也被修改，特点1
+		console.log(son.counts)
+		console.log(son instanceof Dad);
+		console.log(dad instanceof Dad);
+		console.log(dad instanceof Son);
+		//只要是原型链中出现过的原型,isPrototypeOf() 方法就会返回true, 如下所示.
+		console.log(Object.prototype.isPrototypeOf(son));
+		console.log(Dad.prototype.isPrototypeOf(son));
+		console.log(Son.prototype.isPrototypeOf(son));
+		// -----------------------------------------构造函数继承。
+		// 基本思想:即在子类型构造函数的内部调用超类型构造函数.
+		// 优点1.保证了原型链中引用类型值的独立,不再被所有实例共享;
+		// 优点2.子类型也可以向父类型去传递参数
+		// 缺点1.方法都在构造函数中定义, 因此函数复用也就不可用了。
+		// 缺点2.超类型中定义的方法对子类型都是不可见的。
+		function Person(name,age){
+			this.name = name;
+			this.age = age;
+			this.counts = [1,2,3,4,5];
+		}
+		function Man(name,age,sex){
+			Person.call(this,name,age);
+			this.sex = sex;
+		}
+		var man = new Man('刘畅',18,'男');
+		var man1 = new Man('王乐乐',19,'男')
+		man.counts.push(6)
+		console.log(man);//counts为1到6
+		console.log(man1);//counts为1到5
+		// -------------------------------------------采用构造函数和原型链相结合的方法进行继承
+		// 优点1.组合继承避免了原型链和借用构造函数的缺陷,融合了它们的优点,成为 JavaScript 中最常用的继承模式. 而且, instanceof 和 isPrototypeOf( )也能用于识别基于组合继承创建的对象.
+		// 缺点1.每一次集成都调用了两次父父对象，造成了不必要的损失
+		
+		function Teacher(name,age){
+			this.name = name;
+			this.age = age;
+		}
+		Teacher.prototype.sayNmae = function(){
+			console.log(this.name)
+		}
+		function Student(name,age,sex){
+			Teacher.call(this,name,age);
+			this.sex = sex;
+		}
+		Student.prototype = new Teacher();
+		var student = new Student('liuchanh',18,'boy');
+		student.__proto__.name = '王珍';
+		console.log(student);
+	</script>
+</body>
+</html>
