@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Document</title>
+
+</head>
+
+<body>
+
+    <div id="page">
+
+        <div class="content main">
+
+            <div class="refer">
+
+                <ul>
+
+                    <li>1</li>
+
+                    <li>2</li>
+
+                    ...
+
+                </ul>
+
+             </div>
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript">
+	var genCssSelector = function(){
+		var e = arguments[0];
+		var a = [];
+		 (function turn(e){
+		 	if(e.parentNode.tagName){//判断如果存在id将Id输出
+		 		if(e.id){
+		 			a.push('#'+e.id);
+		 		}
+		 		else if(e.className){
+		 			a.push('.'+e.className.replace(/\s+/g,"."));//判断是否存在class，如果存在多个class用正则表达式将空格替换为.
+		 		}else{
+		 			a.push(e.tagName);
+		 		}
+				turn(e.parentNode);
+			}else{
+				a.push(e.tagName);
+			}
+		 })(e);
+		 
+		 return a.reverse();
+	}
+	document.addEventListener('click', function(e){
+
+    //点击li时，返回：html body #page .content.main .refer ul li
+    console.log(genCssSelector(e.target));
+})
+	
+</script>
+
+</html>
+<!-- 
+根据上述HTML结构，完善如下JavaScript代码中的“your code here”部分，使得click事件中的注释要求符合预期：
+
+var genCssSelector = function(){
+
+    // your code here
+
+}
+
+ 
+
+document.addEventListener('click', function(e){
+
+    //点击li时，返回：html body #page .content.main .refer ul li
+
+    console.log(genCssSelector(e.target));
+
+}) -->
