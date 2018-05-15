@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		console.log(( window.foo || ( window.foo = "bar" ) ));
+		function add(x,y){
+			if(y){
+				return x+y;
+			}else{
+				var add2 = function(y){
+					return x+y
+				}
+				return add2;
+			}
+		}
+		console.log(add(2)(5))
+		console.log("i'm a lasagna hog".split(" ").reverse().join(" "))
+		console.log("i'm a lasagna hog".split("").reverse().join(""))
+		var foo = "Hello";
+		(function() {
+		  var bar = " World";
+		  alert(foo + bar);
+		})();
+		//alert(foo + bar); 会报错
+
+		var foo = [];
+		foo.push(1);
+		foo.push(2);
+		console.log(foo.length)
+
+		var foo = {n: 1};
+		var bar = foo;
+		foo.x = foo = {n: 2};
+		console.log(foo.x)
+
+
+	</script>
+</body>
+</html>

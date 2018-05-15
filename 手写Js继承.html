@@ -75,6 +75,58 @@
 		var student = new Student('liuchanh',18,'boy');
 		student.__proto__.name = '王珍';
 		console.log(student);
+
+
+		// ------------------------------------------原型式继承
+		function object(o){    //其本质是对传入的对象进行了一次潜复制
+			function F(){};
+			F.prototype = o;
+			return new F();
+		}
+		function Animal(x,y){
+			this.x=x;
+			this.y=y;
+			this.arr = [12,32,55,45,121];
+		}
+		function Dog(){}
+		/*var Dog = object(Animal.prototype)
+		console.log(Dog)*/
+
+		//-----------------------------------------寄生式继承
+		function createSon(Dad){
+			var clone = object(Dad)
+			clone.sayHi = function(){
+				console.log('你好啊，弟弟们');//以某种方式增强这个对象
+			}
+		}
+
+		//------------------------------------------寄生组合式继承
+		function extend(subClass,superClass){
+			var prototype = object(superClass.prototype);
+			prototype.constructor = subClass; //增强对象
+			subClass.prototype = prototype;//制定对象
+		}
+		/*extend的高效率体现在它没有调用superClass构造函数,因此避免了在subClass.prototype上面创建不必要,多余的属性. 于此同时,原型链还能保持不变; 因此还能正常使用 instanceof 和 isPrototypeOf() 方法.
+		以上,寄生组合式继承,集寄生式继承和组合继承的优点于一身,是实现基于类型继承的最有效方法.*/
+		extend(Dog,Animal)
+		console.log(Dog)
+		function SuperType(name){
+		this.name = name; 
+		this.colors = ["red","blue","green"]; 
+		}
+		SuperType.prototype.sayName = function(){  
+		alert(this.name);   
+		}
+		function SubType(name,age){  
+		SuperType.call(this,name);   
+		this.age = age;   
+		}
+		extend(SubType,SuperType);    
+		SubType.prototype.sayAge = function(){    
+		alert(this.age);  
+		}
+		var subType = new SubType();
+		console.log(subType)
 	</script>
 </body>
 </html>
